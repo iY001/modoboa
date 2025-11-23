@@ -1,3 +1,5 @@
+version: '3.8'
+
 services:
   redis:
     image: redis:7-alpine
@@ -10,7 +12,7 @@ services:
   ldap:
     image: docker.pkg.github.com/modoboa/docker-openldap/docker-openldap
     ports:
-      - 389/tcp
+      - 389:389
     environment:
       LDAP_DOMAIN: example.com
       LDAP_ADMIN_PASSWORD: test
@@ -22,7 +24,6 @@ services:
     environment:
       MARIADB_ROOT_PASSWORD: Password1000
       MARIADB_DATABASE: amavis
-
     volumes:
       - ./docker/mariadb:/var/lib/mysql
     profiles: [amavis]
@@ -49,7 +50,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile.dev
     ports:
-      - 8000:8002
+      - 8002:8002   # changed host port to avoid conflicts
     env_file:
       - test_project/oidc_key
       - test_project/envfile
@@ -80,7 +81,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile.dev
     ports:
-      - 8001:8001
+      - 8003:8001   # changed host port
     env_file:
       - test_project/oidc_key
     environment:
@@ -104,7 +105,7 @@ services:
       context: .
       dockerfile: docker/Dockerfile.front.dev
     ports:
-      - 3000:3000
+      - 3001:3000   # changed host port
     volumes:
       - ./frontend/:/home/node/
     command: >
